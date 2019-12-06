@@ -1,0 +1,40 @@
+name: awesome_clock
+description: A cool looking clock.
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_clock_helper:
+    path: ../flutter_clock_helper
+  cupertino_icons: ^0.1.2
+  flare_flutter: 1.8.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/stacked_rocks.jpg
+    - assets/boats.jpg
+    - assets/sunny.png
+    - assets/cloudy_day.png
+    - assets/snow.png
+    - assets/windy.png
+    - assets/snowing.flr
+    - assets/foggy.png
+    - assets/snowfall.flr
+    - assets/rainfall.flr
+    - assets/thunder.flr
+  fonts:
+    - family: Segment7Standard
+      fonts:
+        - asset: assets/segment7standard/Segment7Standard.otf
+    - family: Varela
+      fonts:
+        - asset: assets/varela/VarelaRound-Regular.ttf
