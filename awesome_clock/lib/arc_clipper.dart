@@ -2,18 +2,35 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-class ArcClipper extends CustomClipper<Path> {
+abstract class OneSidedArc {
+  Path provideClipPath(Size size, num controlPointDistance);
+}
+
+class RightSidedArc implements OneSidedArc {
   @override
-  Path getClip(Size size) {
-    Path path = Path();
-    path.lineTo(size.width, 0);
-    path.lineTo(size.width, 0);
-    path.quadraticBezierTo(
-        size.width - 150, size.height / 2, size.width, size.height);
-    path.lineTo(0, size.height);
+  Path provideClipPath(Size size, num controlPointDistance) {
+    Path path = Path()
+      ..lineTo(size.width, 0)..lineTo(size.width, 0)
+      ..quadraticBezierTo(size.width - controlPointDistance, size.height / 2,
+          size.width, size.height)
+      ..lineTo(0, size.height);
 
     path.close();
     return path;
+  }
+}
+
+class ArcClipper extends CustomClipper<Path> {
+  final num controlPointDistance;
+  final OneSidedArc arc;
+
+  const ArcClipper({@required this.controlPointDistance, @required this.arc})
+      : assert(controlPointDistance != null),
+        assert(arc != null);
+
+  @override
+  Path getClip(Size size) {
+    return arc.provideClipPath(size, controlPointDistance);
   }
 
   @override

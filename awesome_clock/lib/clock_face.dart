@@ -14,7 +14,12 @@ abstract class ClockFace {
     @required this.gradientEnd,
     @required this.backgroundImage,
     @required this.overlay,
-    @required this.pointerColor});
+    @required this.pointerColor})
+      : assert(gradientStart != null),
+        assert(gradientEnd != null),
+        assert(backgroundImage != null),
+        assert(overlay != null),
+        assert(pointerColor != null);
 }
 
 class DarkClockFace extends ClockFace {

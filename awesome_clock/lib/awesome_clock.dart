@@ -1,15 +1,12 @@
 import 'dart:async';
 
 import 'package:awesome_clock/clock_face.dart';
-import 'package:awesome_clock/temperature_view.dart';
-import 'package:flare_flutter/flare_actor.dart';
+import 'package:awesome_clock/weather_status_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_clock_helper/model.dart';
 
-import 'arc_clipper.dart';
-import 'assets_weather_mapper.dart';
 import 'constants.dart';
 import 'hand_manager.dart';
 
@@ -27,11 +24,7 @@ class AwesomeClock extends StatefulWidget {
 class _AwesomeClockState extends State<AwesomeClock> {
   DateTime _dateTime = DateTime.now();
   Timer _timer;
-  num _temperature;
-  var _temperatureUnit = '';
-  var _temperatureRange = '';
-  WeatherCondition _condition;
-  var _location = '';
+  WeatherStatus _weatherStatus;
   ClockFace _clockFace;
   num _markerOffset = MARKER_OFFSET_LANDSCAPE;
 
@@ -82,11 +75,14 @@ class _AwesomeClockState extends State<AwesomeClock> {
 
   void _updateModel() {
     setState(() {
-      _temperature = widget.model.temperature;
-      _temperatureUnit = widget.model.unitString;
-      _temperatureRange = '(${widget.model.low} - ${widget.model.highString})';
-      _condition = widget.model.weatherCondition;
-      _location = widget.model.location;
+      if (_weatherStatus == null) _weatherStatus = WeatherStatus();
+      _weatherStatus.temperature = widget.model.temperature;
+      _weatherStatus.temperatureUnit = widget.model.unitString;
+      _weatherStatus.temperatureRange =
+      '(${widget.model.low} - ${widget.model.highString})';
+      _weatherStatus.condition = widget.model.weatherCondition;
+      _weatherStatus.location = widget.model.location;
+
       if (widget.model.is24HourFormat &&
           _currentHourFormat == _HourFormat.hours12) {
         _currentHourFormat = _HourFormat.hours24;
@@ -140,24 +136,33 @@ class _AwesomeClockState extends State<AwesomeClock> {
         .brightness == Brightness.dark
         ? DarkClockFace()
         : LightClockFace();
-    return LayoutBuilder(builder: (context, constraints) {
-      final weatherDisplayWidth = constraints.maxWidth / 2.2;
-      _markerOffset = (weatherDisplayWidth / HAND_WIDTH).ceil() + 1;
-      return Container(
-        decoration: new BoxDecoration(
-          gradient: new LinearGradient(
-              colors: [_clockFace.gradientStart, _clockFace.gradientEnd],
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight),
-        ),
-        child: Stack(
-          children: <Widget>[
-            _buildTimeDisplayHolder(),
-            _buildWeatherStatusHolder(weatherDisplayWidth),
-          ],
-        ),
-      );
-    });
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final weatherDisplayWidth = constraints.maxWidth / 2.5;
+        final weatherDisplayHeight = constraints.maxHeight;
+        // Put marker at the middle
+        _markerOffset = ((constraints.maxWidth / 2) / HAND_WIDTH).ceil();
+        return Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+                colors: [_clockFace.gradientStart, _clockFace.gradientEnd],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight),
+          ),
+          child: Stack(
+            children: <Widget>[
+              _buildTimeDisplayHolder(),
+              WeatherStatusView(
+                width: weatherDisplayWidth,
+                height: weatherDisplayHeight,
+                clockFace: _clockFace,
+                status: _weatherStatus,
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   Widget _buildTimeDisplayHolder() {
@@ -171,7 +176,7 @@ class _AwesomeClockState extends State<AwesomeClock> {
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Expanded(child: _buildHand(_hourManager, fontSize: 50.0)),
+              Expanded(child: _buildHand(_hourManager)),
               Expanded(child: _buildHand(_minuteManager)),
               Expanded(child: _buildHand(_secondManger, fontSize: 38.0)),
             ],
@@ -183,13 +188,7 @@ class _AwesomeClockState extends State<AwesomeClock> {
   }
 
   Widget _buildHand(HandManager handManager, {fontSize: 48.0}) {
-    return ListView.separated(
-        separatorBuilder: (context, index) {
-          return Divider(
-            color: Colors.black,
-            thickness: 4.0,
-          );
-        },
+    return ListView.builder(
         physics: NeverScrollableScrollPhysics(),
         controller: handManager.controller,
         itemCount: handManager.values.length * handManager.duplicationCount,
@@ -210,81 +209,10 @@ class _AwesomeClockState extends State<AwesomeClock> {
         });
   }
 
-  Widget _buildWeatherStatusHolder(num width) {
-    return ClipPath(
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      clipper: ArcClipper(),
-      child: SizedBox(
-        width: width,
-        child: Stack(
-          children: <Widget>[
-            _buildWallpaper(),
-            _buildOverlay(),
-            Container(
-              margin: EdgeInsets.only(right: width / 4),
-              padding:
-              const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    _location,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 20.0, fontFamily: FONT_VARELA),
-                  ),
-                  Container(
-                    height: 10.0,
-                  ),
-                  TemperatureView(_temperature, _temperatureUnit),
-                  _buildWidgetForWeatherStatus(),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  Container _buildWallpaper() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        image: new DecorationImage(
-          image: new AssetImage(_clockFace.backgroundImage),
-          fit: BoxFit.fill,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildWidgetForWeatherStatus() {
-    final fileName = AssetWeatherMapper.getAssetForWeather(_condition);
-    if (fileName == null ||
-        (!fileName.endsWith('png') && !fileName.endsWith('flr'))) {
-      return Container(
-          child: Text(_condition.toString().split(".")[1].toUpperCase()));
-    }
-    return Container(
-      width: double.infinity,
-      height: 80.0,
-      child: fileName.endsWith('flr')
-          ? FlareActor('assets/$fileName', animation: 'animate')
-          : Image.asset('assets/$fileName'),
-    );
-  }
-
-  Container _buildOverlay() {
-    return Container(color: _clockFace.overlay);
-  }
-
   Widget _buildMarker() {
     return Positioned(
-      top: 10.0,
-      bottom: 10.0,
+      top: 5.0,
+      bottom: 5.0,
       width: HAND_WIDTH,
       left: HAND_WIDTH * _markerOffset,
       child: Container(
