@@ -6,9 +6,6 @@ class ArcClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     Path path = Path();
-//    path.quadraticBezierTo(size.width - 230, size.height / 2, 0, size.height);
-//    path.lineTo(size.width, size.height);
-//    path.lineTo(size.width, 0);
     path.lineTo(size.width, 0);
     path.lineTo(size.width, 0);
     path.quadraticBezierTo(

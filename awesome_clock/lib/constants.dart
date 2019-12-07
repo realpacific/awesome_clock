@@ -1,0 +1,5 @@
+const MARKER_OFFSET_LANDSCAPE = 4;
+const HAND_WIDTH = 90.0;
+const FONT_VARELA = 'Varela';
+const FONT_SEGMENT_7_STANDARD = 'Segment7Standard';
+const HAND_VALUES_DUPLICATION = 5;

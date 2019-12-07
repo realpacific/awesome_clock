@@ -18,5 +18,6 @@ void main() {
   if (!kIsWeb && Platform.isMacOS) {
     debugDefaultTargetPlatformOverride = TargetPlatform.fuchsia;
   }
+
   runApp(ClockCustomizer((ClockModel model) => AwesomeClock(model)));
 }
