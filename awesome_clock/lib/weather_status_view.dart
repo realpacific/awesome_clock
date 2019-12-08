@@ -97,7 +97,7 @@ class WeatherStatusView extends StatelessWidget {
           child: Text(status.condition.toString().split(".")[1].toUpperCase()));
     }
     return Container(
-      width: double.infinity,
+      width: 80.0,
       height: 80.0,
       child: fileName.endsWith('flr')
           ? FlareActor('assets/$fileName', animation: 'animate')

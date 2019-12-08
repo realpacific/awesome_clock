@@ -31,8 +31,8 @@ class DarkClockFace extends ClockFace {
 
   DarkClockFace._getInstance()
       : super(
-    gradientEnd: Color(0xff1C0A4A),
-    gradientStart: Color(0xff170B4B),
+    gradientEnd: Colors.blueGrey.shade900,
+    gradientStart: Colors.black,
     backgroundImage: 'assets/stacked_rocks.jpg',
     overlay: Colors.black54,
     pointerColor: Colors.white,
@@ -48,8 +48,8 @@ class LightClockFace extends ClockFace {
 
   LightClockFace._getInstance()
       : super(
-    gradientEnd: Color(0xffAABED6),
-    gradientStart: Color(0xffD7DFE9),
+    gradientEnd: Colors.indigo.shade50,
+    gradientStart: Colors.indigoAccent,
     backgroundImage: 'assets/boats.jpg',
     overlay: Colors.transparent,
     pointerColor: Colors.black,

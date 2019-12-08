@@ -140,7 +140,7 @@ class _AwesomeClockState extends State<AwesomeClock> {
       builder: (context, constraints) {
         final weatherDisplayWidth = constraints.maxWidth / 2.5;
         final weatherDisplayHeight = constraints.maxHeight;
-        // Put marker at the middle
+        // Put marker as close to the middle as possible without getting overlapped
         _markerOffset = ((constraints.maxWidth / 2) / HAND_WIDTH).ceil();
         return Container(
           decoration: BoxDecoration(
