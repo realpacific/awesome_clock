@@ -88,9 +88,7 @@ class WeatherStatusView extends StatelessWidget {
               status.location,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                  fontSize: width / 14,
-                  fontFamily: FONT_VARELA),
+              style: TextStyle(fontSize: width / 14, fontFamily: FONT_VARELA),
             ),
           )
         ],
@@ -115,10 +113,14 @@ class WeatherStatusView extends StatelessWidget {
     if (fileName == null ||
         (!fileName.endsWith('png') && !fileName.endsWith('flr'))) {
       return Container(
-          child: Text(
-            status.condition.toString().split(".")[1].toUpperCase(),
-            style: TextStyle(fontSize: width / 14, fontFamily: FONT_VARELA),
-          ));
+        child: Text(
+          status.condition.toString().split(".")[1].toUpperCase(),
+          style: TextStyle(
+            fontSize: width / 14,
+            fontFamily: FONT_VARELA,
+          ),
+        ),
+      );
     }
     return Container(
       width: 80.0,

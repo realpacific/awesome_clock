@@ -11,12 +11,11 @@ class TemperatureView extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.start,
+        return Wrap(
+          alignment: WrapAlignment.start,
           children: <Widget>[
             Text(temperature.value.round().toString(),
+                maxLines: 1,
                 style: TextStyle(
                     fontSize: constraints.maxWidth / 3.9,
                     fontFamily: FONT_VARELA,
@@ -27,8 +26,9 @@ class TemperatureView extends StatelessWidget {
               child: Text(
                 temperature.unit,
                 style: TextStyle(
-                    fontSize: constraints.maxWidth / 7.5,
-                    fontFamily: FONT_VARELA, fontWeight: FontWeight.w700),
+                    fontSize: constraints.maxWidth / 6.0,
+                    fontFamily: FONT_VARELA,
+                    fontWeight: FontWeight.w900),
               ),
             ),
           ],
