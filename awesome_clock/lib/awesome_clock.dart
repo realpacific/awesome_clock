@@ -1,14 +1,15 @@
 import 'dart:async';
 
-import 'package:awesome_clock/clock_face.dart';
+import 'package:awesome_clock/constants.dart';
+import 'package:awesome_clock/hand_manager.dart';
+import 'package:awesome_clock/models/clock_face.dart';
+import 'package:awesome_clock/models/temperature.dart';
+import 'package:awesome_clock/models/weather_status.dart';
 import 'package:awesome_clock/weather_status_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_clock_helper/model.dart';
-
-import 'constants.dart';
-import 'hand_manager.dart';
 
 enum _HourFormat { hours24, hours12 }
 
@@ -26,7 +27,7 @@ class _AwesomeClockState extends State<AwesomeClock> {
   Timer _timer;
   WeatherStatus _weatherStatus;
   ClockFace _clockFace;
-  num _markerOffset = MARKER_OFFSET_LANDSCAPE;
+  int _markerOffset = MARKER_OFFSET_LANDSCAPE;
 
   static final ScrollController _hoursController =
       ScrollController(initialScrollOffset: 0.0);
@@ -76,10 +77,12 @@ class _AwesomeClockState extends State<AwesomeClock> {
   void _updateModel() {
     setState(() {
       if (_weatherStatus == null) _weatherStatus = WeatherStatus();
-      _weatherStatus.temperature = widget.model.temperature;
-      _weatherStatus.temperatureUnit = widget.model.unitString;
-      _weatherStatus.temperatureRange =
-      '(${widget.model.low} - ${widget.model.highString})';
+      _weatherStatus.currentTemperature =
+          Temperature(widget.model.temperature, widget.model.unitString);
+      _weatherStatus.lowTemperature =
+          Temperature(widget.model.low, widget.model.unitString);
+      _weatherStatus.highTemperature =
+          Temperature(widget.model.high, widget.model.unitString);
       _weatherStatus.condition = widget.model.weatherCondition;
       _weatherStatus.location = widget.model.location;
 

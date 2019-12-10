@@ -22,7 +22,7 @@ flutter:
   assets:
     - assets/stacked_rocks.jpg
     - assets/boats.jpg
-    - assets/sunny.png
+    - assets/sunny_1.png
     - assets/cloudy_day.png
     - assets/snow.png
     - assets/windy.png

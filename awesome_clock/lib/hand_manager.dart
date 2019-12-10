@@ -1,7 +1,7 @@
+import 'package:awesome_clock/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'constants.dart';
 
 abstract class HandManager {
   /// All possible values for a hand
@@ -56,7 +56,7 @@ abstract class HandManager {
 class SecondHandManager extends HandManager {
   SecondHandManager(ScrollController controller)
       : super(new List<int>.generate(60, (int index) => index), controller,
-            DateFormat("ss")) {
+      DateFormat("ss")) {
     _duplicationCount = HAND_VALUES_DUPLICATION;
   }
 }
@@ -64,7 +64,7 @@ class SecondHandManager extends HandManager {
 class Hour24HandManager extends HandManager {
   Hour24HandManager(ScrollController controller)
       : super(new List<int>.generate(24, (int index) => index + 1), controller,
-            DateFormat("HH")) {
+      DateFormat("HH")) {
     _duplicationCount = HAND_VALUES_DUPLICATION;
   }
 }
@@ -72,7 +72,7 @@ class Hour24HandManager extends HandManager {
 class Hour12HandManager extends HandManager {
   Hour12HandManager(ScrollController controller)
       : super(new List<int>.generate(12, (int index) => index + 1), controller,
-            DateFormat("hh")) {
+      DateFormat("hh")) {
     _duplicationCount = HAND_VALUES_DUPLICATION;
   }
 }
@@ -80,7 +80,7 @@ class Hour12HandManager extends HandManager {
 class MinuteHandManager extends HandManager {
   MinuteHandManager(ScrollController controller)
       : super(new List<int>.generate(60, (int index) => index), controller,
-            DateFormat("mm")) {
+      DateFormat("mm")) {
     _duplicationCount = HAND_VALUES_DUPLICATION;
   }
 }

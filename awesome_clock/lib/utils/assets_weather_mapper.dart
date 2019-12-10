@@ -4,7 +4,7 @@ class AssetWeatherMapper {
   static String getAssetForWeather(WeatherCondition condition) {
     switch (condition) {
       case WeatherCondition.sunny:
-        return 'sunny.png';
+        return 'sunny_1.png';
       case WeatherCondition.cloudy:
         return 'cloudy_day.png';
       case WeatherCondition.foggy:

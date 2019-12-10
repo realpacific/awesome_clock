@@ -3,12 +3,12 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 abstract class OneSidedArc {
-  Path provideClipPath(Size size, num controlPointDistance);
+  Path provideClipPath(Size size, double controlPointDistance);
 }
 
 class RightSidedArc implements OneSidedArc {
   @override
-  Path provideClipPath(Size size, num controlPointDistance) {
+  Path provideClipPath(Size size, double controlPointDistance) {
     Path path = Path()
       ..lineTo(size.width, 0)..lineTo(size.width, 0)
       ..quadraticBezierTo(size.width - controlPointDistance, size.height / 2,
