@@ -189,7 +189,7 @@ class _AwesomeClockState extends State<AwesomeClock> {
     );
   }
 
-  Widget _buildHand(HandManager handManager, {fontSize: 48.0}) {
+  Widget _buildHand(HandManager handManager, {fontSize: 50.0}) {
     return ListView.builder(
         physics: NeverScrollableScrollPhysics(),
         controller: handManager.controller,
@@ -204,7 +204,9 @@ class _AwesomeClockState extends State<AwesomeClock> {
               child: Text(
                 '${(currentTime <= 9) ? '0$currentTime' : currentTime}',
                 style: TextStyle(
-                    fontSize: fontSize, fontFamily: FONT_SEGMENT_7_STANDARD),
+                  fontSize: fontSize,
+                  fontFamily: FONT_SEGMENT_7_STANDARD,
+                ),
               ),
             ),
           );
