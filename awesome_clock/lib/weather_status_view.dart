@@ -5,7 +5,6 @@ import 'package:awesome_clock/models/weather_status.dart';
 import 'package:awesome_clock/temperature_view.dart';
 import 'package:awesome_clock/utils/assets_weather_mapper.dart';
 import 'package:flare_flutter/flare_actor.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -89,7 +88,9 @@ class WeatherStatusView extends StatelessWidget {
               status.location,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: width / 14, fontFamily: FONT_VARELA),
+              style: TextStyle(
+                  fontSize: width / 14,
+                  fontFamily: FONT_VARELA),
             ),
           )
         ],

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:awesome_clock/constants.dart';
 import 'package:awesome_clock/hand_manager.dart';
@@ -6,9 +7,7 @@ import 'package:awesome_clock/models/clock_face.dart';
 import 'package:awesome_clock/models/temperature.dart';
 import 'package:awesome_clock/models/weather_status.dart';
 import 'package:awesome_clock/weather_status_view.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_clock_helper/model.dart';
 
 enum _HourFormat { hours24, hours12 }
@@ -76,7 +75,7 @@ class _AwesomeClockState extends State<AwesomeClock> {
 
   void _updateModel() {
     setState(() {
-      if (_weatherStatus == null) _weatherStatus = WeatherStatus();
+      _weatherStatus ??= WeatherStatus();
       _weatherStatus.currentTemperature =
           Temperature(widget.model.temperature, widget.model.unitString);
       _weatherStatus.lowTemperature =
