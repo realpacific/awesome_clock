@@ -2,7 +2,6 @@ import 'package:awesome_clock/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-
 abstract class HandManager {
   /// All possible values for a hand
   ///

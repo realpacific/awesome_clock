@@ -1,6 +1,7 @@
 import 'package:flutter_clock_helper/model.dart';
 
 class AssetWeatherMapper {
+  /// @return the file name for the [condition] or `null` if [condition] is invalid
   static String getAssetForWeather(WeatherCondition condition) {
     switch (condition) {
       case WeatherCondition.sunny:

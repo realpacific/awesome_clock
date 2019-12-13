@@ -3,9 +3,9 @@ import 'package:awesome_clock/models/temperature.dart';
 import 'package:flutter/material.dart';
 
 class TemperatureView extends StatelessWidget {
-  final Temperature temperature;
+  final Temperature _temperature;
 
-  TemperatureView(this.temperature);
+  TemperatureView(this._temperature);
 
   @override
   Widget build(BuildContext context) {
@@ -14,19 +14,18 @@ class TemperatureView extends StatelessWidget {
         return Wrap(
           alignment: WrapAlignment.start,
           children: <Widget>[
-            Text(temperature.value.round().toString(),
+            Text('${_temperature.value.round()}',
                 maxLines: 1,
                 style: TextStyle(
                     fontSize: constraints.maxWidth / 3.9,
                     fontFamily: FONT_VARELA,
-                    letterSpacing: 1.2,
                     fontWeight: FontWeight.w800)),
             Padding(
-              padding: const EdgeInsets.only(top: 2.0, left: 2.0),
+              padding: const EdgeInsets.only(top: 2.0),
               child: Text(
-                temperature.unit,
+                _temperature.unit,
                 style: TextStyle(
-                    fontSize: constraints.maxWidth / 6.0,
+                    fontSize: constraints.maxWidth / 7.0,
                     fontFamily: FONT_VARELA,
                     fontWeight: FontWeight.w900),
               ),

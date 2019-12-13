@@ -2,12 +2,16 @@ import 'package:awesome_clock/arc_clipper.dart';
 import 'package:awesome_clock/constants.dart';
 import 'package:awesome_clock/models/clock_face.dart';
 import 'package:awesome_clock/models/weather_status.dart';
-import 'package:awesome_clock/temperature_view.dart';
+import 'package:awesome_clock/ui/temperature_range_view.dart';
+import 'package:awesome_clock/ui/temperature_view.dart';
 import 'package:awesome_clock/utils/assets_weather_mapper.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+/// Creates Widget that collectively displays attributes from [status]
+///
+/// The font size in this Widget adapts to the total width of this view.
 class WeatherStatusView extends StatelessWidget {
   final double height;
   final double width;
@@ -53,6 +57,14 @@ class WeatherStatusView extends StatelessWidget {
                   _buildEmptyLayout(height: 10.0),
                   status.currentTemperature != null
                       ? TemperatureView(status.currentTemperature)
+                      : _buildEmptyLayout(),
+                  (status.lowTemperature != null &&
+                      status.highTemperature != null)
+                      ? TemperatureRangeView(
+                    status.lowTemperature,
+                    status.highTemperature,
+                    fontFactor: 10.6,
+                  )
                       : _buildEmptyLayout(),
                   _buildWidgetForWeatherStatus(),
                 ],

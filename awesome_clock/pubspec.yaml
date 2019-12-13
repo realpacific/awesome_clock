@@ -3,7 +3,7 @@ description: A cool looking clock.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.2 <3.0.0"
 
 dependencies:
   flutter:
@@ -24,9 +24,7 @@ flutter:
     - assets/boats.jpg
     - assets/sunny_1.png
     - assets/cloudy_day.png
-    - assets/snow.png
     - assets/windy.png
-    - assets/snowing.flr
     - assets/foggy.png
     - assets/snowfall.flr
     - assets/rainfall.flr

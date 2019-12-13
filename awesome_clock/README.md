@@ -1,6 +1,9 @@
-# awesome_clock
+# Awesome clock
 
-A new Flutter project.
+A cool looking clock. [#FlutterClock](https://flutter.dev/clock)
+
+## Usage
+* `flutter run --release`
 
 ## Getting Started
 

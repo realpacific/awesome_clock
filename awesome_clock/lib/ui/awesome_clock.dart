@@ -6,7 +6,7 @@ import 'package:awesome_clock/hand_manager.dart';
 import 'package:awesome_clock/models/clock_face.dart';
 import 'package:awesome_clock/models/temperature.dart';
 import 'package:awesome_clock/models/weather_status.dart';
-import 'package:awesome_clock/weather_status_view.dart';
+import 'package:awesome_clock/ui/weather_status_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_clock_helper/model.dart';
 
@@ -26,6 +26,8 @@ class _AwesomeClockState extends State<AwesomeClock> {
   Timer _timer;
   WeatherStatus _weatherStatus;
   ClockFace _clockFace;
+
+  /// The amount by which to offset the clock's marker or hand to the right
   int _markerOffset = MARKER_OFFSET_LANDSCAPE;
 
   static final ScrollController _hoursController =
@@ -98,9 +100,10 @@ class _AwesomeClockState extends State<AwesomeClock> {
   }
 
   void _updateTime() {
-    var indexOfMinutes = _minuteManager.calculateIndex(_dateTime);
-    var indexOfSeconds = _secondManger.calculateIndex(_dateTime);
-    var indexOfHours = _hourManager.calculateIndex(_dateTime);
+    // Since the time has updated, scroll to all hands to new values with animation
+    final indexOfMinutes = _minuteManager.calculateIndex(_dateTime);
+    final indexOfSeconds = _secondManger.calculateIndex(_dateTime);
+    final indexOfHours = _hourManager.calculateIndex(_dateTime);
     if (_secondManger.controller.hasClients) {
       _secondManger.controller.animateTo(
         (indexOfSeconds - _markerOffset) * HAND_WIDTH,
@@ -147,16 +150,17 @@ class _AwesomeClockState extends State<AwesomeClock> {
         return Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-                colors: [_clockFace.gradientStart, _clockFace.gradientEnd],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight),
+              colors: [_clockFace.gradientStart, _clockFace.gradientEnd],
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+            ),
           ),
           child: Stack(
             children: <Widget>[
               _buildTimeDisplayHolder(),
               WeatherStatusView(
-                width: weatherDisplayWidth,
                 height: weatherDisplayHeight,
+                width: weatherDisplayWidth,
                 clockFace: _clockFace,
                 status: _weatherStatus,
               ),
@@ -215,16 +219,16 @@ class _AwesomeClockState extends State<AwesomeClock> {
 
   Widget _buildMarker() {
     return Positioned(
-      top: 5.0,
-      bottom: 5.0,
+      top: 6.0,
+      bottom: 6.0,
       width: HAND_WIDTH,
       left: HAND_WIDTH * _markerOffset,
       child: Container(
-        width: HAND_WIDTH + 6.0,
+        width: HAND_WIDTH + 5.0,
         decoration: BoxDecoration(
           border: Border.all(
             color: _clockFace.pointerColor,
-            width: 2.5,
+            width: 2.6,
           ),
         ),
       ),

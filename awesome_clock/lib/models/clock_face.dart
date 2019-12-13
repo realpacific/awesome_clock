@@ -32,7 +32,7 @@ class DarkClockFace extends ClockFace {
   DarkClockFace._getInstance()
       : super(
     gradientEnd: Colors.indigo.shade900,
-    gradientStart: Colors.black,
+    gradientStart: Colors.indigo.shade700,
     backgroundImage: 'assets/stacked_rocks.jpg',
     overlay: Colors.black54,
     pointerColor: Colors.white,
