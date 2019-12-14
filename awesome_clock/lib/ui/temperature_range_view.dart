@@ -3,8 +3,7 @@ import 'package:awesome_clock/models/temperature.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-///
-/// Widget displays the temperature range in the format of `L[lowTemperature] [separator] H[highTemperature]`
+/// Displays the temperature range
 ///
 /// example: L22°/H26°
 class TemperatureRangeView extends StatelessWidget {
@@ -14,11 +13,13 @@ class TemperatureRangeView extends StatelessWidget {
   /// Separates [lowTemperature] and [highTemperature].
   final String separator;
 
-  /// Factor by which to divide the maximum width of parent
+  /// Factor by which to divide the maximum width of parent to get the font size.
+  ///
+  /// If not provided, the font size of 20.0 is used.
   final double fontFactor;
 
-  TemperatureRangeView(this.lowTemperature, this.highTemperature,
-      {this.separator: '/', this.fontFactor});
+  const TemperatureRangeView(this.lowTemperature, this.highTemperature,
+      {this.separator = '/', this.fontFactor});
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +59,7 @@ class TemperatureRangeView extends StatelessWidget {
       ),
       TextSpan(
           text:
-              '${temperature.value.round()}${temperature.unit[0] == "°" ? "°" : ""}',
+          '${temperature.value.round()}${temperature.hasDegrees() ? "°" : ""}',
           style: TextStyle(fontSize: fontSize, fontFamily: FONT_VARELA))
     ];
   }

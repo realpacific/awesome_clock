@@ -3,9 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 abstract class OneSidedArc {
-  /// Provides path to create an arc on one side on a Canvas of size [size] using control point at distance of [controlPointDistance].
-  ///
-  /// @return Path for the arc
+  /// Returns path to create an arc on one side of a Canvas with `Size` [size]
+  /// using control point at distance of [controlPointDistance].
   Path provideClipPath(Size size, double controlPointDistance);
 }
 
@@ -23,7 +22,8 @@ class RightSidedArc implements OneSidedArc {
   }
 }
 
-/// Clips based on the [arc] and distance of Bezier control point [controlPointDistance]
+/// Clips using the `Path` provided by [arc] with Bezier control point
+/// at a distance of [controlPointDistance].
 class ArcClipper extends CustomClipper<Path> {
   final num controlPointDistance;
   final OneSidedArc arc;

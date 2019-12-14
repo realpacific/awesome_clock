@@ -1,8 +1,9 @@
 import 'dart:ui';
 
+import 'package:awesome_clock/utils.dart';
 import 'package:flutter/material.dart';
 
-/// Defines the visual properties of Clock's face
+/// Defines the visual properties of Clock's face.
 abstract class ClockFace {
   final Color gradientStart;
   final Color gradientEnd;
@@ -10,11 +11,13 @@ abstract class ClockFace {
   final Color overlay;
   final Color pointerColor;
 
-  ClockFace({@required this.gradientStart,
+  const ClockFace({
+    @required this.gradientStart,
     @required this.gradientEnd,
     @required this.backgroundImage,
     @required this.overlay,
-    @required this.pointerColor})
+    @required this.pointerColor,
+  })
       : assert(gradientStart != null),
         assert(gradientEnd != null),
         assert(backgroundImage != null),
@@ -33,7 +36,7 @@ class DarkClockFace extends ClockFace {
       : super(
     gradientEnd: Colors.indigo.shade900,
     gradientStart: Colors.indigo.shade700,
-    backgroundImage: 'assets/stacked_rocks.jpg',
+    backgroundImage: 'stacked_rocks.jpg'.toAsset(),
     overlay: Colors.black54,
     pointerColor: Colors.white,
   );
@@ -50,7 +53,7 @@ class LightClockFace extends ClockFace {
       : super(
     gradientEnd: Colors.indigo.shade50,
     gradientStart: Colors.indigoAccent,
-    backgroundImage: 'assets/boats.jpg',
+    backgroundImage: 'boats.jpg'.toAsset(),
     overlay: Colors.transparent,
     pointerColor: Colors.black,
   );

@@ -2,10 +2,13 @@ import 'package:awesome_clock/constants.dart';
 import 'package:awesome_clock/models/temperature.dart';
 import 'package:flutter/material.dart';
 
+/// Displays attributes of [_temperature]
+///
+/// The fonts in this Widget adapts to the width this gets.
 class TemperatureView extends StatelessWidget {
   final Temperature _temperature;
 
-  TemperatureView(this._temperature);
+  const TemperatureView(this._temperature);
 
   @override
   Widget build(BuildContext context) {
@@ -14,20 +17,24 @@ class TemperatureView extends StatelessWidget {
         return Wrap(
           alignment: WrapAlignment.start,
           children: <Widget>[
-            Text('${_temperature.value.round()}',
-                maxLines: 1,
-                style: TextStyle(
-                    fontSize: constraints.maxWidth / 3.9,
-                    fontFamily: FONT_VARELA,
-                    fontWeight: FontWeight.w800)),
+            Text(
+              '${_temperature.value.round()}',
+              maxLines: 1,
+              style: TextStyle(
+                fontSize: constraints.maxWidth / 3.9,
+                fontFamily: FONT_VARELA,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.only(top: 2.0),
               child: Text(
                 _temperature.unit,
                 style: TextStyle(
-                    fontSize: constraints.maxWidth / 7.0,
-                    fontFamily: FONT_VARELA,
-                    fontWeight: FontWeight.w900),
+                  fontSize: constraints.maxWidth / 7.0,
+                  fontFamily: FONT_VARELA,
+                  fontWeight: FontWeight.w900,
+                ),
               ),
             ),
           ],

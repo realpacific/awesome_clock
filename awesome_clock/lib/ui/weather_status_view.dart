@@ -4,21 +4,23 @@ import 'package:awesome_clock/models/clock_face.dart';
 import 'package:awesome_clock/models/weather_status.dart';
 import 'package:awesome_clock/ui/temperature_range_view.dart';
 import 'package:awesome_clock/ui/temperature_view.dart';
-import 'package:awesome_clock/utils/assets_weather_mapper.dart';
+import 'package:awesome_clock/utils.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-/// Creates Widget that collectively displays attributes from [status]
+/// Collectively displays [status] using [clockFace] for visual properties.
 ///
-/// The font size in this Widget adapts to the total width of this view.
+/// The font size in this Widget adapts to the total width of this Widget.
 class WeatherStatusView extends StatelessWidget {
   final double height;
+
+  /// The width of this Widget used to adapt font size.
   final double width;
   final WeatherStatus status;
   final ClockFace clockFace;
 
-  WeatherStatusView({@required this.height,
+  const WeatherStatusView({@required this.height,
     @required this.width,
     @required this.status,
     @required this.clockFace})
@@ -45,21 +47,24 @@ class WeatherStatusView extends StatelessWidget {
             _buildOverlay(),
             Container(
               margin: EdgeInsets.only(right: width / 4),
-              padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 12.0,
+                vertical: 12.0,
+              ),
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  (status.location != null && status.location.length > 0)
+                  (status?.location?.isNotEmpty ?? false)
                       ? _buildLocationView(width)
                       : _buildEmptyLayout(),
                   _buildEmptyLayout(height: 10.0),
-                  status.currentTemperature != null
+                  (status?.currentTemperature != null)
                       ? TemperatureView(status.currentTemperature)
                       : _buildEmptyLayout(),
-                  (status.lowTemperature != null &&
-                      status.highTemperature != null)
+                  (status?.lowTemperature != null &&
+                      status?.highTemperature != null)
                       ? TemperatureRangeView(
                     status.lowTemperature,
                     status.highTemperature,
@@ -86,14 +91,14 @@ class WeatherStatusView extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white.withAlpha(12),
-        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+        borderRadius: const BorderRadius.all(Radius.circular(8.0)),
       ),
       child: Row(
         children: <Widget>[
           Container(
-            padding: EdgeInsets.all(2.0),
-            child: Icon(Icons.location_on),
-            margin: EdgeInsets.only(right: 4.0),
+            padding: const EdgeInsets.all(2.0),
+            child: const Icon(Icons.location_on),
+            margin: const EdgeInsets.only(right: 4.0),
           ),
           Expanded(
             child: Text(
@@ -112,8 +117,8 @@ class WeatherStatusView extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        image: new DecorationImage(
-          image: new AssetImage(clockFace.backgroundImage),
+        image: DecorationImage(
+          image: AssetImage(clockFace.backgroundImage),
           fit: BoxFit.fill,
         ),
       ),
@@ -121,12 +126,11 @@ class WeatherStatusView extends StatelessWidget {
   }
 
   Widget _buildWidgetForWeatherStatus() {
-    final fileName = AssetWeatherMapper.getAssetForWeather(status.condition);
-    if (fileName == null ||
-        (!fileName.endsWith('png') && !fileName.endsWith('flr'))) {
+    final fileName = status.assetForWeatherCondition();
+    if (!fileName.isValidFileFormat()) {
       return Container(
         child: Text(
-          status.condition.toString().split(".")[1].toUpperCase(),
+          status.weatherConditionToString(),
           style: TextStyle(
             fontSize: width / 14,
             fontFamily: FONT_VARELA,
@@ -137,9 +141,9 @@ class WeatherStatusView extends StatelessWidget {
     return Container(
       width: 80.0,
       height: 80.0,
-      child: fileName.endsWith('flr')
-          ? FlareActor('assets/$fileName', animation: 'animate')
-          : Image.asset('assets/$fileName'),
+      child: fileName.isFlareFile()
+          ? FlareActor(fileName.toAsset(), animation: 'animate')
+          : Image.asset(fileName.toAsset()),
     );
   }
 

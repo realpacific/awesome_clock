@@ -4,7 +4,6 @@ import 'dart:ui';
 import 'package:awesome_clock/constants.dart';
 import 'package:awesome_clock/hand_manager.dart';
 import 'package:awesome_clock/models/clock_face.dart';
-import 'package:awesome_clock/models/temperature.dart';
 import 'package:awesome_clock/models/weather_status.dart';
 import 'package:awesome_clock/ui/weather_status_view.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +26,7 @@ class _AwesomeClockState extends State<AwesomeClock> {
   WeatherStatus _weatherStatus;
   ClockFace _clockFace;
 
-  /// The amount by which to offset the clock's marker or hand to the right
+  /// The amount by which to offset the clock's marker or hand to the right.
   int _markerOffset = MARKER_OFFSET_LANDSCAPE;
 
   static final ScrollController _hoursController =
@@ -38,13 +37,14 @@ class _AwesomeClockState extends State<AwesomeClock> {
       ScrollController(initialScrollOffset: 0.0);
 
   HandManager _hourManager;
-  HandManager _minuteManager = MinuteHandManager(_minutesController);
-  HandManager _secondManger = SecondHandManager(_secondController);
+  final _minuteManager = MinuteHandManager(_minutesController);
+  final _secondManger = SecondHandManager(_secondController);
   var _currentHourFormat = _HourFormat.hours12;
 
   @override
   void initState() {
     super.initState();
+    _weatherStatus ??= WeatherStatus();
     _hourManager = widget.model.is24HourFormat
         ? Hour24HandManager(_hoursController)
         : Hour12HandManager(_hoursController);
@@ -77,16 +77,9 @@ class _AwesomeClockState extends State<AwesomeClock> {
 
   void _updateModel() {
     setState(() {
-      _weatherStatus ??= WeatherStatus();
-      _weatherStatus.currentTemperature =
-          Temperature(widget.model.temperature, widget.model.unitString);
-      _weatherStatus.lowTemperature =
-          Temperature(widget.model.low, widget.model.unitString);
-      _weatherStatus.highTemperature =
-          Temperature(widget.model.high, widget.model.unitString);
-      _weatherStatus.condition = widget.model.weatherCondition;
-      _weatherStatus.location = widget.model.location;
+      _weatherStatus.from(widget.model);
 
+      /// Detect if hour format has changed and update accordingly.
       if (widget.model.is24HourFormat &&
           _currentHourFormat == _HourFormat.hours12) {
         _currentHourFormat = _HourFormat.hours24;
@@ -100,7 +93,7 @@ class _AwesomeClockState extends State<AwesomeClock> {
   }
 
   void _updateTime() {
-    // Since the time has updated, scroll to all hands to new values with animation
+    // Since the time has updated, scroll all the hands to the new values.
     final indexOfMinutes = _minuteManager.calculateIndex(_dateTime);
     final indexOfSeconds = _secondManger.calculateIndex(_dateTime);
     final indexOfHours = _hourManager.calculateIndex(_dateTime);
@@ -145,7 +138,7 @@ class _AwesomeClockState extends State<AwesomeClock> {
       builder: (context, constraints) {
         final weatherDisplayWidth = constraints.maxWidth / 2.5;
         final weatherDisplayHeight = constraints.maxHeight;
-        // Put marker as close to the middle as possible without getting overlapped
+        // Put marker as close to the middle as possible.
         _markerOffset = ((constraints.maxWidth / 2) / HAND_WIDTH).ceil();
         return Container(
           decoration: BoxDecoration(
@@ -197,11 +190,11 @@ class _AwesomeClockState extends State<AwesomeClock> {
     return ListView.builder(
         physics: NeverScrollableScrollPhysics(),
         controller: handManager.controller,
-        itemCount: handManager.values.length * handManager.duplicationCount,
+        itemCount: handManager.handValues.length * handManager.duplicationCount,
         scrollDirection: Axis.horizontal,
-        itemBuilder: (BuildContext context, int index) {
+        itemBuilder: (context, index) {
           int currentTime =
-          handManager.values[index % handManager.values.length];
+          handManager.handValues[index % handManager.handValues.length];
           return Container(
             width: HAND_WIDTH,
             child: Center(
