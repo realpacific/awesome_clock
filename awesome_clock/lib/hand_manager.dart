@@ -17,23 +17,24 @@ abstract class HandManager {
   /// Used to extract the hand value from current time.
   final DateFormat dateFormat;
 
-  /// Should be at least 1 and less than [_duplicationCount]
+  /// Should be at least 1 and less than [duplicationCount]
   /// to have a spare set of hand values on the left and right respectively.
   int _counter = 1;
 
   /// The number of times the [_handValues] is duplicated
   /// while being displayed in widgets for continuous forward flow.
-  int _duplicationCount = HAND_VALUES_DUPLICATION;
+  final duplicationCount;
 
   int _previousValue = 0;
 
-  HandManager(List<int> handValues, this.controller, this.dateFormat) {
+  HandManager(List<int> handValues, this.controller, this.dateFormat,
+      {this.duplicationCount = HAND_VALUES_DUPLICATION}) {
+    assert(this.duplicationCount >= 3,
+    "Duplication count can not be less than 3.");
     this._handValues = List<int>.unmodifiable(handValues);
   }
 
   List<int> get handValues => _handValues;
-
-  int get duplicationCount => _duplicationCount;
 
   /// Calculates the index of current hand value in the list of [handValues]
   /// while taking in account the [_counter] and
@@ -49,21 +50,27 @@ abstract class HandManager {
     if (_previousValue == handTime) {
       return newPosition;
     }
-    _previousValue = handTime;
     // If the current hand value is equal to the max possible hand value
-    // (that is the last element of [values]), then switch to new iteration.
-    if (handTime == handValues.last) {
+    // (last element), then switch to new iteration.
+    if (_previousValue == handValues.last) {
       _counter++;
+      if (_previousValue != handTime) {
+        _previousValue = handTime;
+        // Also recalculate the new index using updated counter.
+        return indexOfCurrentHand + handValues.length * _counter;
+      }
     }
+
     // Reset the [_counter] since there is only one set of the hand values left,
     // and we have to leave one set of hand values to the right.
-    if (_counter == _duplicationCount - 1) {
+    if (_counter == duplicationCount - 1) {
       // Reset to 1 so as to offset the list and leave one unexplored
       // set of hand values on the left.
       _counter = 1;
       // Jump to the 2nd set of hand values.
-      return indexOfCurrentHand + handValues.length * _counter;
+      return indexOfCurrentHand + handValues.length;
     }
+    _previousValue = handTime;
     return newPosition;
   }
 }
@@ -74,9 +81,7 @@ class SecondHandManager extends HandManager {
     List<int>.generate(60, (int index) => index),
     controller,
     DateFormat("ss"),
-  ) {
-    _duplicationCount = 10;
-  }
+  );
 }
 
 class Hour24HandManager extends HandManager {

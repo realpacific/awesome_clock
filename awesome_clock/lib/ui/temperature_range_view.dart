@@ -58,9 +58,13 @@ class TemperatureRangeView extends StatelessWidget {
             fontFamily: FONT_VARELA),
       ),
       TextSpan(
-          text:
-          '${temperature.value.round()}${temperature.hasDegrees() ? "°" : ""}',
-          style: TextStyle(fontSize: fontSize, fontFamily: FONT_VARELA))
+        text:
+        '${temperature.value.round()}${temperature.hasDegrees() ? "°" : ""}',
+        style: TextStyle(
+          fontSize: fontSize,
+          fontFamily: FONT_VARELA,
+        ),
+      )
     ];
   }
 }
